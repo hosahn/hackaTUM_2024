@@ -5,4 +5,4 @@ mainRouter.get("/main", (req:Request, res:Response)  => {
     res.send("Initial endpoint");
 })
 
-export {mainRouter}
+export { mainRouter }
