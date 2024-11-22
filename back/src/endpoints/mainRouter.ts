@@ -1,6 +1,6 @@
 import express, { Router, Request, Response , Application } from 'express';
 
-const mainRouter = Router();
+const mainRouter:Router = Router();
 mainRouter.get("/main", (req:Request, res:Response)  => {
     res.send("Initial endpoint");
 })
