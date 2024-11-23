@@ -37,13 +37,12 @@ export default function ReviewArticle() {
 
     const handlePublish = () => {
         setLoading(true);
-        console.log(1);
         axios.post(DISCORD_WEBHOOK, {
             embeds: [{
                 title: data.title,
                 description: data.lead,
                 image: {
-                    url: 'https://meedia.oberauer-cloud.com/news_detail_slider/uploads/news/67f4946f-37fc-42d0-98db-7d3d22c6a06f.jpg'
+                    url: 'https://images.unsplash.com/photo-1615901555268-839b7a1ede54?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
                 }
             },{
                 title: data.subheadline,
@@ -64,7 +63,7 @@ export default function ReviewArticle() {
                         <h1 className="text-3xl font-bold">{data.title}</h1>
                         <p>{(new Date(Date.now())).toDateString()}, Garching</p>
                         <p>{data.lead}</p>
-                        <img src={"https://meedia.oberauer-cloud.com/news_detail_slider/uploads/news/67f4946f-37fc-42d0-98db-7d3d22c6a06f.jpg"} alt={"loading..."} />
+                        <img src={"https://images.unsplash.com/photo-1615901555268-839b7a1ede54?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt={"loading..."} />
                         <h2 className="text-xl font-bold">{data.subheadline}</h2>
                         <p>{data.body}</p>
                         <br />
