@@ -29,6 +29,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/mozilla__readability": "^0.4.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.7.2"
   }
