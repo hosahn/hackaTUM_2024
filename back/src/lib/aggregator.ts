@@ -2,6 +2,7 @@ import RSSParser from 'rss-parser';
 
 // Define types for Feed and Topic
 interface Topic {
+  id:number;
   title: string;
   link: string;
   pubDate: string | undefined;
@@ -9,10 +10,6 @@ interface Topic {
   content: string | undefined;
 }
 
-interface FeedOptions {
-  url?: string;
-  xml?: string;
-}
 
 class Aggregator {
   private parser: RSSParser;
@@ -26,34 +23,28 @@ class Aggregator {
    * @param options - Options object containing `url` or `xml`.
    * @returns Promise<Topic[]> - A list of parsed topics.
    */
-  async fetchTopics(options: FeedOptions): Promise<Topic[]> {
-    try {
-      let feed;
-
-      // Fetch and parse RSS feed based on input
-      if (options.url) {
-        feed = await this.parser.parseURL(options.url);
-      } else if (options.xml) {
-        feed = await this.parser.parseString(options.xml);
-      } else {
-        throw new Error('Either a URL or XML string must be provided');
+  async fetchTopics(options: string[]): Promise<Topic[]> {
+      let feed = [];
+      for(let i = 0 ; i < options.length; i++){
+        let tmp = await this.parser.parseURL(options[i]);
+        feed.push(tmp) 
       }
 
+      // Fetch and parse RSS feed based on input
       // Extract topics from feed
-      const topics: Topic[] = feed.items.map(item => ({
+      var id = 0;
+      const topics: Topic[] = feed.map(item => ({
+        id: id++,
         title: item.title || 'Untitled',
         link: item.link || '',
         pubDate: item.pubDate,
-        source: feed.title || 'Unknown Source',
+        source: 'Unknown Source',
         content: item.content || item.contentSnippet || ''
       }));
 
       return topics;
-    } catch (error) {
-      console.error('Error fetching topics:', error);
-      throw new Error('Failed to fetch topics from RSS feed');
-    }
+  
   }
 }
 
-export default Aggregator;
+export {Aggregator};

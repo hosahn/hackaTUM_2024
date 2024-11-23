@@ -21,6 +21,9 @@ class basicAIService{
             console.error('Error:', error.response?.data || error.message);
         }
     }
+    static async summaryArticles(input:string[]){
+        return ""
+    }
 }
 
 export {basicAIService}
