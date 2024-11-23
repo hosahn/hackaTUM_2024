@@ -7,7 +7,19 @@ const AZURE_ENDPOINT = process.env.GPT_4o || "none"
 const AZURE_IMAGE_ENDPOINT = process.env.GPT_IMAGE || "none"
 
 class basicAIService{
-    
+    static async mockOption(){
+        const api_call = await axios.post(
+            AZURE_ENDPOINT,
+            { "messages": [{"role": "user", "content": "Give me an article about US international relationship in HTML format. Please avoid to start conversation like 'okay', just give me ONLY HTML format of this article"}], },
+        );
+        return api_call.data.choices[0].message.content
+    }
+    static async evaluateOpinion(input:string[]){
+        const api_call = await axios.post(
+            AZURE_ENDPOINT,
+            { "messages": [{"role": "user", "content": "who will be the next president of US?"}], },
+        );
+    }
     static async generateArticles(input:string){
 
         try {
