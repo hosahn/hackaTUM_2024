@@ -9,7 +9,7 @@ interface Topic {
     content: string | undefined;
 }
 
-const blacklist = ["https://www.faz.net/", "https://www.bild.de/", "https://www.kn-online.de/"]
+const blacklist = ["https://www.faz.net/", "https://www.bild.de/", "https://www.kn-online.de/", "https://www.n-tv.de/"]
 
 class Aggregator {
     private parser: RSSParser;
