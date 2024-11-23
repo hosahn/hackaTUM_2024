@@ -36,6 +36,9 @@ mainRouter.post("/api/generateArticle", async(req:Request, res:Response)  => {
     // TODO var result = await basicAIService.generateArticles(req.body);
     var result = await basicAIService.generateArticles("");
     var final_result = await basicAIService.automatedQualityCheck(result);
+
+    var what_does_people_think = await GenericUtilService.cool_keyword_twitter_scraper(["",""])
+    var evaluation = await basicAIService.evaluateOpinion(what_does_people_think)
     res.send(final_result)
 })
 
@@ -55,8 +58,10 @@ mainRouter.post("/api/publishArticle", async(req:Request,res:Response)=>{
 
 
 mainRouter.get("/api/debug", async(req:Request,res:Response)=>{
-    var imageList = await basicAIService.generateMedia(["e-auto", "conflict", "eco system"])
-    res.send(imageList)
+    var result = await basicAIService.mockOption();
+    res.send(result);
+    //var imageList = await basicAIService.generateMedia(["e-auto", "conflict", "eco system"])
+    //res.send(imageList)
 })
 
 
