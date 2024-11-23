@@ -61,28 +61,6 @@ class basicAIService {
         });
     
         let result: Summary[] = [];
-        let input_clustring: string[] = [
-            "Ecosystems are interconnected networks of living organisms and their physical environments, forming a balanced system of mutual dependence.",
-            "Deforestation and pollution disrupt ecosystems, threatening biodiversity and natural processes.",
-            "Electric cars rely on rechargeable batteries and emit no tailpipe pollutants, reducing air pollution.",
-            "The transition to electric vehicles is accelerating, driven by advancements in battery technology and government incentives.",
-            "CO2-neutral refers to balancing carbon emissions with removal or offsetting actions, achieving net-zero emissions.",
-            "Renewable energy sources like solar and wind are essential for creating CO2-neutral energy systems.",
-            "Renewable energy harnesses resources like sunlight, wind, and water to provide sustainable power without depleting Earth's reserves.",
-            "Wind turbines and solar panels have become the leading symbols of the renewable energy revolution.",
-            "Climate change is driven by human activities, primarily the burning of fossil fuels, leading to global temperature rise and severe weather events.",
-            "Governments worldwide are adopting climate action policies to limit warming to 1.5°C as part of the Paris Agreement.",
-            "Ecosystems are vital for sustaining life, providing services like clean air, water, and fertile soil.",
-            "Electric cars are a cornerstone of sustainable transportation, helping reduce greenhouse gas emissions.",
-            "Achieving CO2 neutrality is essential to combat climate change and create a sustainable future.",
-            "Renewable energy sources, such as wind and solar, are replacing fossil fuels in the global energy mix.",
-            "Deforestation and urbanization disrupt natural habitats, threatening biodiversity and ecosystem balance.",
-            "Battery technology advancements are driving electric vehicle efficiency and adoption worldwide.",
-            "Transitioning to CO2-neutral operations requires innovation in renewable energy and carbon offset solutions.",
-            "Global warming caused by human activity is leading to more extreme weather patterns and rising sea levels.",
-            "Smart grids and energy storage systems are enhancing the reliability of renewable power sources.",
-            "Countries are committing to net-zero goals, aiming to reduce carbon emissions and invest in green technologies."
-          ];
         // Limit the number of articles to process
         let length = input.length > 20 ? 20 : input.length;
         for (let i = 0; i < length; i++) {
@@ -125,16 +103,14 @@ class basicAIService {
                 category = category.toLowerCase();
 
                 result.push({"category":category, "summary":summary, "idx":input[i].id})
-                
-                input_clustring.push(summary)
 
             } catch (error: any) {
                 continue
             }
         }
 
-        const clustring_result = await axios.post('http://localhost:8000/api', {data:input_clustring})
-        console.log(clustring_result)
+        //const clustring_result = await axios.post('http://localhost:8000/api', {data:input_clustring})
+        //console.log(clustring_result)
 
         return result;
     }

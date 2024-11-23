@@ -41,8 +41,8 @@ mainRouter.post("/api/getArticles", jsonParser,async(req:Request, res:Response) 
     let length = result.length > 20 ? 20 : result.length
     for(let i = 0; i < length; i++){
         try{
-        var actual_summary = GenericUtilService.extractArticleFromUrl(result[i].link);
-        result[i].content = await actual_summary || result[i].content;
+        var actual_summary = await GenericUtilService.extractArticleFromUrl(result[i].link);
+        result[i].content = actual_summary;
         }
         catch(error:any){
               result.splice(i, 1); // 2nd parameter means remove one item only
@@ -53,10 +53,17 @@ mainRouter.post("/api/getArticles", jsonParser,async(req:Request, res:Response) 
 
     var combined : getArticlesView[] = [];
     var final_list :getArticlesViewList = {"data":[], "categories":[]};
+
     for(let i = 0; i < summaries.length; i++){
-        console.log(summaries[i].idx)
-        result[summaries[i].idx].content = summaries[i].summary;
-        let tmp : getArticlesView = {metainfo:result[summaries[i].idx],category:summaries[i].category};
+        let idxx = 0;
+        for(let j = 0; j < result.length; j++){
+            if (result[j].id == summaries[i].idx){
+                result[j].content = summaries[i].summary
+                idxx = j
+            }
+        }
+        
+        let tmp : getArticlesView = {metainfo:result[idxx],category:summaries[i].category};
         combined.push(tmp);
     }
     final_list.data = combined
@@ -119,7 +126,6 @@ mainRouter.post("/api/publishArticle", async (req: Request, res: Response) => {
 mainRouter.get("/api/debug", async(req:Request,res:Response)=>{
     var list = ["https://rss.app/feeds/MLuDKqkwFtd2tuMr.xml",
         "https://www.autobild.de/rss/22590661.xml"]
-
     var result:Topic[] = [];
     try{
     var result = await aggregator.fetchTopics(list);
@@ -131,8 +137,8 @@ mainRouter.get("/api/debug", async(req:Request,res:Response)=>{
     let length = result.length > 20 ? 20 : result.length
     for(let i = 0; i < length; i++){
         try{
-        var actual_summary = GenericUtilService.extractArticleFromUrl(result[i].link);
-        result[i].content = await actual_summary || result[i].content;
+        var actual_summary = await GenericUtilService.extractArticleFromUrl(result[i].link);
+        result[i].content = actual_summary;
         }
         catch(error:any){
               result.splice(i, 1); // 2nd parameter means remove one item only
@@ -143,9 +149,17 @@ mainRouter.get("/api/debug", async(req:Request,res:Response)=>{
 
     var combined : getArticlesView[] = [];
     var final_list :getArticlesViewList = {"data":[], "categories":[]};
+
     for(let i = 0; i < summaries.length; i++){
-        result[summaries[i].idx].content = summaries[i].summary;
-        let tmp : getArticlesView = {metainfo:result[summaries[i].idx],category:summaries[i].category};
+        let idxx = 0;
+        for(let j = 0; j < result.length; j++){
+            if (result[j].id == summaries[i].idx){
+                result[j].content = summaries[i].summary
+                idxx = j
+            }
+        }
+        
+        let tmp : getArticlesView = {metainfo:result[idxx],category:summaries[i].category};
         combined.push(tmp);
     }
     final_list.data = combined

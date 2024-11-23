@@ -15,6 +15,7 @@
     "@mozilla/readability": "^0.5.0",
     "@types/jsdom": "^21.1.7",
     "axios": "^1.7.7",
+    "azure-openai": "^0.9.4",
     "body-parser": "^1.20.3",
     "cheerio": "^1.0.0",
     "cors": "^2.8.5",
