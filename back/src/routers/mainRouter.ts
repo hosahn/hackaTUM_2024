@@ -43,6 +43,11 @@ mainRouter.post("/api/userFeedback", async(req:Request, res:Response) => {
     res.send("1337")
 })
 
+mainRouter.post("/api/generateImages", async(req:Request, res:Response) => {
+    var imageList = await basicAIService.generateMedia(["e-auto", "conflict", "eco system"])
+    res.send(imageList)
+})
+
 mainRouter.post("/api/publishArticle", async(req:Request,res:Response)=>{
     res.send("1337")
 })
@@ -50,8 +55,8 @@ mainRouter.post("/api/publishArticle", async(req:Request,res:Response)=>{
 
 
 mainRouter.get("/api/debug", async(req:Request,res:Response)=>{
-    var list = await GenericUtilService.cool_keyword_google_scraper(["electic auto", "trump"])
-    res.send(list);
+    var imageList = await basicAIService.generateMedia(["e-auto", "conflict", "eco system"])
+    res.send(imageList)
 })
 
 

@@ -57,7 +57,10 @@ class basicAIService{
     }
     
     static async generateMedia(keywords:string[]){
+        let imageList = []
+
         try {
+            for(let i = 0; i < 3; i++){
             const api_call = await axios.post(
                 AZURE_IMAGE_ENDPOINT,
                 {
@@ -66,9 +69,9 @@ class basicAIService{
                     "quality": "standard"
                    },
             );
-            const imageUrl = api_call.data.data[0].url;
-            console.log(imageUrl);
-            return imageUrl;
+            imageList.push(api_call.data.data[0].url);
+            }
+            return imageList;
         } catch (error:any) {
             console.error('Error:', error.response?.data || error.message);
         }
