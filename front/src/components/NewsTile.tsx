@@ -20,7 +20,7 @@ export default function NewsTile({index, article, callback}: NewsTileProps) {
 
     return (
         <>
-            <label className={"m-5 p-5 shadow-xl flex flex-col gap-5 rounded-lg glass" + (check ? "text-black bg-primary glow-effect" : "bg-base-200")}>
+            <label className={"m-5 p-5 shadow-xl flex flex-col gap-5 rounded-lg" + (check ? "text-black bg-primary glow-effect" : "bg-base-200")}>
 
                 <input type="checkbox" checked={check} onChange={handleChange} hidden={true}/>
                 <h2 className="card-title">
