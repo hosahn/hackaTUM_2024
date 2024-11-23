@@ -36,18 +36,50 @@ export default function SelectTopics() {
     let [filterKeywords, setFilterKeywords] = useState<string[]>([]);
     const handleFilterChange = (keywords: string[]) => {
         setFilterKeywords(keywords);
-        setArticles(data.data.filter(a => (filterKeywords.length == 0 ? true : keywords.map(k => k.toLowerCase()).indexOf(a.category) !== -1)));
+
+        let filteredArticles = data.data.filter(a => {
+            if (keywords.length == 0) {
+                return true;
+            } else {
+                for(let keyword of keywords) {
+                    for(let topic of a.category.split(", ")) {
+                        console.log(a.metainfo.title + " - " + topic + " = " + keyword.toLowerCase() + " -> " + (topic === keyword.toLowerCase()))
+                        if (topic === keyword.toLowerCase()) return true;
+                    }
+                }
+                return false;
+            }
+        });
+        console.log(filteredArticles);
+        setArticles(filteredArticles);
     }
 
-
+    const [loading, setLoading] = useState(false);
     const submitData = () => {
         let urls = selection.map(i => data.data[i].metainfo.link);
-        console.log(urls);
-        axios.get("http://localhost:3000/api/debug").then(e => {
-            console.log(e.data);
-            localStorage.setItem("article-text", e.data);
-            navigate("reviewArticle");
-        });
+
+        let topics_aggregated = selection.map(i => data.data[i].category.split(", ").map(s => s.toLowerCase())).flat();
+        let keywords: string[] = [];
+
+        for(let t of topics_aggregated) {
+            if(keywords.indexOf(t) < 0) {
+                keywords.push(t);
+            }
+        }
+
+        let word_count = 500;
+        console.log(keywords);
+
+        setLoading(true);
+        axios.post("http://localhost:3000/api/generateArticle", {
+            urls,
+            keywords,
+            word_count,
+        })
+            .then(e => {
+                localStorage.setItem("article-text", JSON.stringify(e.data));
+                navigate("/reviewArticle", {replace: true});
+            });
         /*
         axios.post("http://localhost:3000/api/generateArticle" , {urls}).then(e => {
             console.log(e.data);
@@ -57,18 +89,22 @@ export default function SelectTopics() {
     };
 
     return (
-        <div className="w-3/4 mx-auto flex flex-row">
-            <div className="w-full flex max-h-[75vh] flex-col gap-7">
-                <Timeline index={2}/>
+        <div className="w-11/12 mx-auto flex flex-row">
+            <div className="w-full flex max-h-[85vh] flex-col gap-7">
+                <Timeline index={1}/>
                 <FilterChipList keywords={data.categories} callback={handleFilterChange}/>
                 <div className="grid grid-cols-2 gap-2 overflow-x-scroll">
                     {
                         articles.map(
-                            (article, index) => (<NewsTile key={index} index={index} article={article} callback={handleSelectionChange}/>)
+                            (article, index) => (<NewsTile key={index} index={index} article={article}
+                                                           callback={handleSelectionChange}/>)
                         )
                     }
                 </div>
-                <button className="btn btn-primary text-white" onClick={submitData}>Generate article</button>
+                <button className="btn btn-primary text-white" onClick={submitData} disabled={loading}>
+                    {loading ? (<span className="loading loading-spinner loading-sm"></span>) : (<></>)}
+                    Generate article
+                </button>
             </div>
         </div>
     );

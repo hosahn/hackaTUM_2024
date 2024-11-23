@@ -162,7 +162,7 @@ mainRouter.post("/api/generateArticle", jsonParser,async (req: Request, res: Res
     // ];
     // var keywords: string[] = ["Technology", "Electric Vehicles", "Tesla", "Elon Musk", "Germany", "Europe"];
     // var word_count: number = 250;
-
+    console.log(req.body);
     var selected_urls: string[] = req.body.urls;
     var keywords: string[] = req.body.keywords;
     var word_count: number = req.body.word_count;
@@ -185,10 +185,7 @@ mainRouter.post("/api/generateArticle", jsonParser,async (req: Request, res: Res
     }
 
     var result = await basicAIService.generateArticles(selected_urls, keywords, length, Language.German);
-    var final_result = await basicAIService.automatedQualityCheck(result);
-
-    var what_does_people_think = await GenericUtilService.cool_keyword_twitter_scraper(["",""])
-    res.send(final_result)
+    res.send(result);
 })
 
 mainRouter.post("/api/userFeedback", async (req: Request, res: Response) => {

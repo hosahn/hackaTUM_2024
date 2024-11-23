@@ -2,6 +2,7 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import axios from 'axios';
 import Timeline from "../components/Timeline.tsx";
 import {useNavigate} from "react-router-dom";
+import {useState} from "react";
 
 export default function ProvideSources() {
 
@@ -21,12 +22,15 @@ export default function ProvideSources() {
 https://www.autobild.de/rss/22590661.xml
      */
 
+    const [loading, setLoading] = useState(false);
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         let urls = data.urls.split('\n').filter(e => e.length > 0);
+        setLoading(true);
         axios.post("http://localhost:3000/api/getArticles", {urls}).then(response => {
+            console.log(response.data);
             localStorage.setItem('articles', JSON.stringify(response.data));
             console.log(response.data);
-            navigate("/selectTopics");
+            navigate("/selectTopics", {replace: true});
         });
     };
 
@@ -38,7 +42,10 @@ https://www.autobild.de/rss/22590661.xml
                     <h1 className="text-2xl">Provide a list of sources</h1>
                     <textarea className="textarea textarea-bordered min-h-64"
                               placeholder="RSS feed urls..." {...register("urls")}/>
-                    <button className="btn btn-primary text-white" type="submit">Load new articles</button>
+                    <button className="btn btn-primary text-white" type="submit" disabled={loading}>
+                        {loading ? (<span className="loading loading-spinner loading-sm"></span>) : (<></>)}
+                        Load new articles
+                    </button>
                 </form>
             </div>
         </div>
