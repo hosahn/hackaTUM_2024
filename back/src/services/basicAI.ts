@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import axios from "axios";
-import { Topic } from '../lib/aggregator';
+import { Topic } from './aggregator';
+import { GenericUtilService } from './genericUtil';
+import { ArticleLength, Language, createArticleGenerationPrompt } from './prompt';
 dotenv.config();
 
 interface Summary {
@@ -12,7 +14,7 @@ interface Summary {
 const AZURE_ENDPOINT = process.env.GPT_4o || "none"
 const AZURE_IMAGE_ENDPOINT = process.env.GPT_IMAGE || "none"
 
-class basicAIService{
+class basicAIService {
     static async mockOption(){
         const api_call = await axios.post(
             AZURE_ENDPOINT,
@@ -26,17 +28,24 @@ class basicAIService{
             { "messages": [{"role": "user", "content": "who will be the next president of US?"}], },
         );
     }
-    static async generateArticles(input:string){
+    static async generateArticles(urls: string[], keywords: string[], word_count: number, language: Language) {
+        const contents = await Promise.all(urls.map(url =>
+            GenericUtilService.extractArticleFromUrl(url)
+        ));
+        // Drop articles with no content
+        const filtered_contents = contents.filter(content => content !== null) as string[];
+        const prompt = createArticleGenerationPrompt(filtered_contents, keywords, word_count, Language.German);
+        console.log("Prompt:", prompt.content);
 
         try {
             const api_call = await axios.post(
                 AZURE_ENDPOINT,
-                { "messages": [{"role": "user", "content": "who will be the next president of US?"}], },
+                { "messages": [{ "role": "user", "content": prompt.content }], },
             );
-    
+
             const responseMessage = api_call.data.choices[0].message.content;
             return responseMessage;
-        } catch (error:any) {
+        } catch (error: any) {
             console.error('Error:', error.response?.data || error.message);
         }
     }
@@ -121,7 +130,7 @@ class basicAIService{
                     "prompt": "electric car",
                     "n": 1,
                     "quality": "standard"
-                   },
+                },
             );
             imageList.push(api_call.data.data[0].url);
             }
@@ -132,7 +141,7 @@ class basicAIService{
         return ""
     }
 
-    static async automatedQualityCheck(result:string){
+    static async automatedQualityCheck(result: string) {
         // TODO implement QC mecnahism
         return result;
     }
