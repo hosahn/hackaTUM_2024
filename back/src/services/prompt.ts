@@ -22,6 +22,7 @@ function createArticleGenerationPrompt(article_contents: string[], keywords: str
             .map((content, index) => `${index + 1}. ${content}`)
             .join("\n");
         const prompt = `Du bist ein Autor für eine deutsche Nachrichtenwebsite für Elektrofahrzeuge. Schreibe einen Artikel mit ${length} Wörtern. Der Stil sollte ein formeller Nachrichtenbeitrag sein. Versuche die folgenden Schlüsselwörter einzubeziehen: ${keywords.join(", ")}.\n\n` +
+            `Deine Antwort soll valides JSON sein. Es soll einen Titel haben (json: title), eine Unterüberschrift (json: subheadline), eine knappe und aufmerksamkeitserregende Einleitung (json: lead), und den eigentlichen Hauptteil (json: body).\n\n` +
             `Verwende die folgenden Texte als Vorlage:\n${formattedContents}`
         console.log("Prompt:", prompt);
         return { language, content: prompt };
