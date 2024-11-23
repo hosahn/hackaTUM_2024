@@ -23,11 +23,23 @@ interface getArticlesViewList{
 mainRouter.post("/api/getArticles", async(req:Request, res:Response)  => {
     var list = ["https://rss.app/feeds/MLuDKqkwFtd2tuMr.xml",
         "https://www.autobild.de/rss/22590661.xml"]
+    var result:Topic[] = [];
+    try{
     var result = await aggregator.fetchTopics(list);
+    }
+    catch(error:any){
+        console.log("hello0")
+    }
+
     let length = result.length > 10 ? 10 : result.length
     for(let i = 0; i < length; i++){
+        try{
         var actual_summary = GenericUtilService.extractArticleFromUrl(result[i].link);
         result[i].content = await actual_summary || result[i].content;
+        }
+        catch(error:any){
+              result.splice(i, 1); // 2nd parameter means remove one item only
+        }
     }
 
     var summaries:Summary[] = await basicAIService.summaryArticles(result);
@@ -41,7 +53,7 @@ mainRouter.post("/api/getArticles", async(req:Request, res:Response)  => {
     }
     final_list.data = combined
     final_list.categories = ["Deals", "New launch", "politics", "Environment", "Company news", "Future technology", "Two-wheeler"]
-    res.send(combined);
+    res.send(final_list);
 })
 
 mainRouter.post("/api/generateArticle", async(req:Request, res:Response)  => {

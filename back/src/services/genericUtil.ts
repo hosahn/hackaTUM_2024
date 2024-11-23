@@ -8,27 +8,25 @@ import googleNewsScraper, {Article} from "google-news-scraper";
 
 class GenericUtilService {
     // Function to extract article content from a URL
-    static async extractArticleFromUrl(url: string): Promise<string | null> {
-        const { data } = await axios.get(url);
+    static async extractArticleFromUrl(url: string): Promise<string> {
+        const { data }  = await axios.get(url);
         try {
-           
-
-            const dom = new JSDOM(data);
-            const document = dom.window.document;
-
-            const reader = new Readability(document);
-            const article = reader.parse();
-
-            if (article && article.content) {
-                return article.content;
-            } else {
-                const $ = cheerio.load(data);
-                const content = $("article, .post-content, .entry-content").text().trim();
-
-                return content || "No content found.";
+              const $ = cheerio.load(data);
+              const content = $("article, .post-content, .entry-content").text().trim();
+              let final_string = content || "No content found."
+              if (final_string == "No content found."){
+                if (data.length > 12800) {
+                  return data.slice(0, 12800); // Keep only the first 12,800 characters
+              }
+                return data || ""
+              }
+              return final_string.slice()
             }
-        } catch (error:any) {
-            return data;
+        catch (error:any) {
+          if (data.length > 12800) {
+            return data.slice(0, 12800); // Keep only the first 12,800 characters
+        }
+            return data || "";
         }
     }
 
