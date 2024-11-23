@@ -9,8 +9,9 @@ import googleNewsScraper, {Article} from "google-news-scraper";
 class GenericUtilService {
     // Function to extract article content from a URL
     static async extractArticleFromUrl(url: string): Promise<string | null> {
+        const { data } = await axios.get(url);
         try {
-            const { data } = await axios.get(url);
+           
 
             const dom = new JSDOM(data);
             const document = dom.window.document;
@@ -27,8 +28,7 @@ class GenericUtilService {
                 return content || "No content found.";
             }
         } catch (error:any) {
-            console.error("Error extracting article:", error.message);
-            return null;
+            return data;
         }
     }
 
