@@ -33,12 +33,15 @@ mainRouter.post("/api/getArticles", async(req:Request, res:Response)  => {
     var summaries:Summary[] = await basicAIService.summaryArticles(result);
 
     var combined : getArticlesView[] = [];
+    var final_list :getArticlesViewList = {"data":[], "categories":[]};
     for(let i = 0; i < summaries.length; i++){
         result[summaries[i].idx].content = summaries[i].summary;
         let tmp : getArticlesView = {metainfo:result[i],category:summaries[i].category};
         combined.push(tmp);
     }
-    res.send(combined);
+    final_list.data = combined
+    final_list.categories = ["Deals", "New launch", "politics", "Environment", "Company news", "Future technology", "Two-wheeler"]
+    res.send(final_list);
 })
 
 mainRouter.post("/api/generateArticle", async(req:Request, res:Response)  => {
