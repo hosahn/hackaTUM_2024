@@ -54,8 +54,9 @@ class basicAIService{
         let result: Summary[] = [];
     
         // Limit the number of articles to process
-        let length = input.length > 15 ? 15 : input.length;
+        let length = input.length > 10 ? 10 : input.length;
         for (let i = 0; i < length; i++) {
+            console.log(i)
             let text = input[i].content;
             let messages = [{ "role": "user", "content": `summarize this article: ${text}` }];
     
@@ -85,7 +86,6 @@ class basicAIService{
                     continue
                 }
                 if (responseMessage) {
-                    console.log(responseMessage);
                     messages.push({ "role": "system", "content": responseMessage });
                 } else {
                     console.error("Error: No response content in API call 3");
