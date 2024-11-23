@@ -15,19 +15,8 @@ const AZURE_ENDPOINT = process.env.GPT_4o || "none"
 const AZURE_IMAGE_ENDPOINT = process.env.GPT_IMAGE || "none"
 
 class basicAIService {
-    static async mockOption(){
-        const api_call = await axios.post(
-            AZURE_ENDPOINT,
-            { "messages": [{"role": "user", "content": "Give me an article about US international relationship in HTML format. Please avoid to start conversation like 'okay', just give me ONLY HTML format of this article"}], },
-        );
-        return api_call.data.choices[0].message.content
-    }
-    static async evaluateOpinion(input:string[]){
-        const api_call = await axios.post(
-            AZURE_ENDPOINT,
-            { "messages": [{"role": "user", "content": "who will be the next president of US?"}], },
-        );
-    }
+
+
     static async generateArticles(urls: string[], keywords: string[], word_count: number, language: Language) {
         const contents = await Promise.all(urls.map(url =>
             GenericUtilService.extractArticleFromUrl(url)
@@ -96,7 +85,7 @@ class basicAIService {
                 }
     
                 // Fourth API call to classify the article's primary topic
-                messages.push({ "role": "user", "content": `Which of the following topics is the article primarily focused on? Deals, New launch, politics, Environment, Company news, Future technology, Two-wheeler Answer with ONLY category` });
+                messages.push({ "role": "user", "content": `Which of the following topics is the article primarily focused on? Deals, New launch, politics, Environment, Company news, electric cars,Future technology, Two-wheeler Answer with maximal 3 categories, seperate categories with ','` });
     
                 const api_call4 = await axios.post(AZURE_ENDPOINT, { "messages": messages });
                 let category:string = api_call4.data.choices[0]?.message?.content;

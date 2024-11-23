@@ -67,7 +67,7 @@ mainRouter.post("/api/getArticles", jsonParser,async(req:Request, res:Response) 
         combined.push(tmp);
     }
     final_list.data = combined
-    final_list.categories = ["Deals", "New launch", "politics", "Environment", "Company news", "Future technology", "Two-wheeler"]
+    final_list.categories = ["Deals", "New launch", "politics", "Environment", "electric cars", "Company news", "Future technology", "Two-wheeler"]
     res.send(final_list);
 })
 
@@ -104,7 +104,6 @@ mainRouter.post("/api/generateArticle", jsonParser,async (req: Request, res: Res
     var final_result = await basicAIService.automatedQualityCheck(result);
 
     var what_does_people_think = await GenericUtilService.cool_keyword_twitter_scraper(["",""])
-    var evaluation = await basicAIService.evaluateOpinion(what_does_people_think)
     res.send(final_result)
 })
 
@@ -163,7 +162,7 @@ mainRouter.get("/api/debug", async(req:Request,res:Response)=>{
         combined.push(tmp);
     }
     final_list.data = combined
-    final_list.categories = ["Deals", "New launch", "politics", "Environment", "Company news", "Future technology", "Two-wheeler"]
+    final_list.categories = ["Deals", "New launch", "politics", "Environment", "electric cars", "Company news", "Future technology", "Two-wheeler"]
     res.send(final_list);
 })
 
