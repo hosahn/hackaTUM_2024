@@ -5,13 +5,13 @@ type TimelineProps = {
 }
 
 export default function Timeline(props: TimelineProps) {
-    const steps = ["Provide Sources", "Select Topics", "Review Article", "Select Image", "Publish Article"];
+    const steps = ["Provide Sources", "Select Topics", "Review Article", "Publish Article"];
     return (
         <div className="mx-auto">
             <ul className="timeline">
                 {
                     steps.map((step, index) =>
-                        (<li>
+                        (<li key={index}>
                                 {index > 0 ? (<hr className="bg-white"/>) : (<></>)}
                                 <div className="timeline-start">{index + 1}</div>
                                 <div className="timeline-middle">
@@ -23,8 +23,7 @@ export default function Timeline(props: TimelineProps) {
                                 <div className="timeline-end timeline-box">{step}</div>
                                 {index < (steps.length - 1) ? (<hr className="bg-white"/>) : (<></>)}
                             </li>
-                        )
-                    )
+                        ))
                 }
             </ul>
         </div>

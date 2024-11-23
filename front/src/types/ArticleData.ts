@@ -7,7 +7,7 @@ declare type ArticleData = {
         source: string,
         title: string,
     },
-    summary: string,
+    category: string,
 };
 
 export default ArticleData;
