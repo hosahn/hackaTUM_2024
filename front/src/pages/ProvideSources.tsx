@@ -3,6 +3,7 @@ import axios from 'axios';
 import Timeline from "../components/Timeline.tsx";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
+import MOCK_MODE from "../components/mockMode.ts";
 
 export default function ProvideSources() {
 
@@ -24,6 +25,13 @@ https://www.autobild.de/rss/22590661.xml
 
     const [loading, setLoading] = useState(false);
     const onSubmit: SubmitHandler<Inputs> = (data) => {
+
+        if(MOCK_MODE) {
+            setLoading(true);
+            setTimeout(() => navigate("/selectTopics", {replace: true}), 1000);
+            return;
+        }
+
         let urls = data.urls.split('\n').filter(e => e.length > 0);
         setLoading(true);
         axios.post("http://localhost:3000/api/getArticles", {urls}).then(response => {
@@ -44,7 +52,7 @@ https://www.autobild.de/rss/22590661.xml
                               placeholder="RSS feed urls..." {...register("urls")}/>
                     <button className="btn btn-primary text-white" type="submit" disabled={loading}>
                         {loading ? (<span className="loading loading-spinner loading-sm"></span>) : (<></>)}
-                        Load new articles
+                        Load New Articles
                     </button>
                 </form>
             </div>

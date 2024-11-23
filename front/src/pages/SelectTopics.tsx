@@ -5,6 +5,7 @@ import axios from 'axios';
 import {useNavigate} from "react-router-dom";
 import FilterChipList from "../components/FilterChipList.tsx";
 import {useState} from "react";
+import MOCK_MODE from "../components/mockMode.ts";
 
 type SourceResponse = {
     categories: string[],
@@ -56,6 +57,13 @@ export default function SelectTopics() {
 
     const [loading, setLoading] = useState(false);
     const submitData = () => {
+
+        if(MOCK_MODE) {
+            setLoading(true);
+            setTimeout(() => navigate("/reviewArticle", {replace: true}), 1000);
+            return;
+        }
+
         let urls = selection.map(i => data.data[i].metainfo.link);
 
         let topics_aggregated = selection.map(i => data.data[i].category.split(", ").map(s => s.toLowerCase())).flat();
