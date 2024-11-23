@@ -13,6 +13,7 @@ function App() {
                   HeadlineHunter
               </a>
           </div>
+          <div className="max-w-screen-lg mx-auto">
           <Router>
               <Routes>
                   <Route path="/" element={<ProvideSources/>}/>
@@ -21,6 +22,7 @@ function App() {
                   <Route path="/selectTopics" element={<SelectInterestingTopics/>}/>
               </Routes>
           </Router>
+          </div>
       </>
   )
 }
