@@ -169,7 +169,12 @@ class basicAIService {
 
     static async automatedQualityCheck(result: string) {
         // TODO implement QC mecnahism
-        return result;
+        const api_call = await axios.post(
+            AZURE_ENDPOINT,
+            { "messages": [{ "role": "user", "content": `please analyse this string of opinion and give me the number between 0 to 100 of positive opinion score. Don't have to analyse it, just give me the number, only number. ${result}` }], },
+        );
+        let summary: string = api_call.data.choices[0]?.message?.content;
+        return summary;
     }
 }
 

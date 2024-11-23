@@ -108,7 +108,13 @@ mainRouter.post("/api/generateArticle", jsonParser,async (req: Request, res: Res
 })
 
 mainRouter.post("/api/userFeedback", async (req: Request, res: Response) => {
-    res.send("1337")
+    const feedback = await GenericUtilService.cool_keyword_twitter_scraper([""]);
+    let opinion = ""
+    for(let i = 0; i < feedback.length; i++){
+        opinion += feedback[i].text
+    }
+    const evaluation = await basicAIService.automatedQualityCheck(opinion);
+    res.send(evaluation)
 })
 
 mainRouter.post("/api/generateImages", async(req:Request, res:Response) => {
@@ -123,47 +129,13 @@ mainRouter.post("/api/publishArticle", async (req: Request, res: Response) => {
 
 
 mainRouter.get("/api/debug", async(req:Request,res:Response)=>{
-    var list = ["https://rss.app/feeds/MLuDKqkwFtd2tuMr.xml",
-        "https://www.autobild.de/rss/22590661.xml"]
-    var result:Topic[] = [];
-    try{
-    var result = await aggregator.fetchTopics(list);
+    const feedback = await GenericUtilService.cool_keyword_twitter_scraper([""]);
+    let opinion = ""
+    for(let i = 0; i < feedback.length; i++){
+        opinion += feedback[i].text
     }
-    catch(error:any){
-        console.log("hello0")
-    }
-
-    let length = result.length > 20 ? 20 : result.length
-    for(let i = 0; i < length; i++){
-        try{
-        var actual_summary = await GenericUtilService.extractArticleFromUrl(result[i].link);
-        result[i].content = actual_summary;
-        }
-        catch(error:any){
-              result.splice(i, 1); // 2nd parameter means remove one item only
-        }
-    }
-
-    var summaries:Summary[] = await basicAIService.summaryArticles(result);
-
-    var combined : getArticlesView[] = [];
-    var final_list :getArticlesViewList = {"data":[], "categories":[]};
-
-    for(let i = 0; i < summaries.length; i++){
-        let idxx = 0;
-        for(let j = 0; j < result.length; j++){
-            if (result[j].id == summaries[i].idx){
-                result[j].content = summaries[i].summary
-                idxx = j
-            }
-        }
-        
-        let tmp : getArticlesView = {metainfo:result[idxx],category:summaries[i].category};
-        combined.push(tmp);
-    }
-    final_list.data = combined
-    final_list.categories = ["Deals", "New launch", "politics", "Environment", "electric cars", "Company news", "Future technology", "Two-wheeler"]
-    res.send(final_list);
+    const evaluation = await basicAIService.automatedQualityCheck(opinion);
+    res.send(evaluation)
 })
 
 
