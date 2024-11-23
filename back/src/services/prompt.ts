@@ -22,7 +22,7 @@ function createArticleGenerationPrompt(article_contents: string[], keywords: str
         .join("\n");
 
     if (language === Language.German) {
-        const prompt = `Du bist ein Autor für eine deutsche Nachrichtenwebsite für Elektrofahrzeuge. Schreibe einen Artikel mit ${length} Wörtern. Der Stil sollte ein formeller Nachrichtenbeitrag sein. Versuche die folgenden Schlüsselwörter einzubeziehen: ${keywords.join(", ")}.\n\n` +
+        const prompt = `Du bist ein Autor für eine deutsche Nachrichtenwebsite für Elektrofahrzeuge. Schreibe den Artikel auf deutsch. Schreibe einen Artikel mit ${length} Wörtern. Der Stil sollte ein formeller Nachrichtenbeitrag sein. Versuche die folgenden Schlüsselwörter einzubeziehen: ${keywords.join(", ")}.\n\n` +
             `Deine Antwort muss valides JSON sein. Verwende keine Markdown Syntax, die Antwort muss in Klartext sein, da wir es als JSON parsen müssen. Es soll einen Titel haben (json: title), eine Unterüberschrift (json: subheadline), eine knappe und aufmerksamkeitserregende Einleitung (json: lead), und den eigentlichen Hauptteil (json: body).\n\n` +
             `Verwende die folgenden Texte als Vorlage:\n${formattedContents}`
 
@@ -35,6 +35,5 @@ function createArticleGenerationPrompt(article_contents: string[], keywords: str
 
     return { language, content: prompt };
 }
-
 
 export { Language, Prompt, ArticleLength, createArticleGenerationPrompt };
