@@ -1,20 +1,27 @@
 import express, { Router, Request, Response , Application } from 'express';
 import { basicAIService } from '../services/basicAI';
-import { Aggregator } from '../lib/aggregator';
+import { Aggregator, Topic } from '../lib/aggregator';
 const mainRouter:Router = Router();
 const aggregator:Aggregator = new Aggregator();
 mainRouter.get("/api", async(req:Request, res:Response)  => {
+    await basicAIService.generateMedia(["boy", "asian", "anime"])
     res.send("Welcome to news generator. Every requests should go through post request")
 })
 
-mainRouter.post("/api/getArticles", async(req:Request, res:Response)  => {
+interface getArticlesView {
+    metainfo : Topic,
+    summary:string,
+}
+mainRouter.get("/api/getArticles", async(req:Request, res:Response)  => {
     var list = ["https://rss.app/feeds/MLuDKqkwFtd2tuMr.xml",
         "https://www.autobild.de/rss/22590661.xml"]
     var result = await aggregator.fetchTopics(list);
-
-    console.log(result);
-    var summary = await basicAIService.searchArticles("");
-    var combined;
+    var summaries = await basicAIService.summaryArticles(result);
+    var combined : getArticlesView[] = [];
+    for(let i = 0; i < summaries.length; i++){
+        let tmp : getArticlesView = {metainfo:result[i],summary:summaries[i]};
+        combined.push(tmp);
+    }
     res.send(combined);
 })
 

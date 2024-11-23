@@ -9,6 +9,7 @@ interface Topic {
     content: string | undefined;
 }
 
+const blacklist = ["https://www.faz.net/", "https://www.bild.de/", "https://www.kn-online.de/"]
 
 class Aggregator {
     private parser: RSSParser;
@@ -25,9 +26,9 @@ class Aggregator {
     async fetchTopics(urls: string[]): Promise<Topic[]> {
         // Use Promise.all to fetch all feeds concurrently
         const feeds = await Promise.all(urls.map(url => this.parser.parseURL(url)));
-
+        console.log(feeds[0]);
         let id = 0;
-        const topics: Topic[] = feeds.flatMap(feed =>
+        let topics: Topic[] = feeds.flatMap(feed =>
             feed.items.map(item => ({
                 id: id++,
                 title: item.title || 'Untitled',
@@ -37,9 +38,12 @@ class Aggregator {
                 content: item.content || item.contentSnippet || ''
             }))
         );
+        const topics_sanitized: Topic[] = topics.filter((feed) => {
+            return !blacklist.some(blacklistedUrl => feed.link && feed.link.includes(blacklistedUrl));
+        });
 
-        return topics;
+        return topics_sanitized;
     }
 }
 
-export { Aggregator };
+export { Aggregator, Topic };
