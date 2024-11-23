@@ -41,7 +41,7 @@ mainRouter.post("/api/getArticles", async(req:Request, res:Response)  => {
     }
     final_list.data = combined
     final_list.categories = ["Deals", "New launch", "politics", "Environment", "Company news", "Future technology", "Two-wheeler"]
-    res.send(final_list);
+    res.send(combined);
 })
 
 mainRouter.post("/api/generateArticle", async(req:Request, res:Response)  => {
@@ -90,7 +90,7 @@ mainRouter.get("/api/debug", async(req:Request,res:Response)=>{
     }
     final_list.data = combined
     final_list.categories = ["Deals", "New launch", "politics", "Environment", "Company news", "Future technology", "Two-wheeler"]
-    res.send(final_list);
+    res.send(combined);
 })
 
 
