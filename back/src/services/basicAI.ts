@@ -63,7 +63,7 @@ class basicAIService {
         let result: Summary[] = [];
     
         // Limit the number of articles to process
-        let length = input.length > 10 ? 10 : input.length;
+        let length = input.length > 20 ? 20 : input.length;
         for (let i = 0; i < length; i++) {
             console.log(i)
             let text = input[i].content;
@@ -76,18 +76,14 @@ class basicAIService {
     
                 messages.push({ "role": "system", "content": summary });
                 // Second API call to evaluate the article based on 11 criteria
-                messages.push({ "role": "user", "content": `1.Does the content provide original information, reporting, research, or analysis?
-                                                            2.Does the content provide a substantial, complete, or comprehensive description of the topic?
-                                                            3.Does the content provide insightful analysis or interesting information that is beyond the 4.obvious?
-                                                            5.If the content draws on other sources, does it avoid simply copying or rewriting those sources, 6.and instead provide substantial additional value and originality?
-                                                            7.Does the main heading or page title provide a descriptive, helpful summary of the content?
-                                                            8.Does the main heading or page title avoid exaggerating or being shocking in nature?
-                                                            9.Is this the sort of page you'd want to bookmark, share with a friend, or recommend?
-                                                            10.Would you expect to see this content in or referenced by a printed magazine, encyclopedia, or book?
-                                                            11.Does the content provide substantial value when compared to other pages in search results?
-                                                            If this article meets no less than 7 of the criteria. Answer 'yes', else 'no' Please do not provide additional explanation.
+                messages.push({ "role": "user", "content": `
+                    if an article does look like an advertisement, please reply directly with "no"
+                    if an article promotes a product like headset or ssd, please reply directly with "no"
+                    if an article makes a "special offer", please reply directly with "no"
+                    Also, if an article is not relevant to themes like electric cars or electric bikes, please reply directly with "no"
+                    If it's okay, Answer 'yes', else 'no' Please do not provide additional explanation.
+                    You dont have to analyse your result.
                                                             ` });
-    
                 const api_call2 = await axios.post(AZURE_ENDPOINT, { "messages": messages });
 
                 let responseMessage = api_call2.data.choices[0]?.message?.content;
@@ -108,12 +104,12 @@ class basicAIService {
                 let category:string = api_call4.data.choices[0]?.message?.content;
                 category = category.toLowerCase();
 
-                result.push({"category":category, "summary":summary, "idx":i})
+                result.push({"category":category, "summary":summary, "idx":input[i].id})
                 
                 
 
             } catch (error: any) {
-                console.error('Error:', error.response?.data || error.message);
+                continue
             }
         }
         return result;

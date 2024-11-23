@@ -4,9 +4,15 @@ import { GenericUtilService } from '../services/genericUtil';
 import { Aggregator, Topic } from '../services/aggregator';
 import { Language, ArticleLength } from '../services/prompt';
 import { Summary } from '../services/basicAI';
+
+import bodyParser = require('body-parser');
+var jsonParser = bodyParser.json()
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+
 const mainRouter: Router = Router();
 const aggregator: Aggregator = new Aggregator();
-mainRouter.get("/api", async (req: Request, res: Response) => {
+mainRouter.get("/api", jsonParser, async (req: Request, res: Response) => {
     await basicAIService.generateMedia(["boy", "asian", "anime"])
     res.send("Welcome to news generator. Every requests should go through post request")
 })
@@ -21,7 +27,7 @@ interface getArticlesViewList{
     categories:string[]
 }
 
-mainRouter.post("/api/getArticles", async(req:Request, res:Response)  => {
+mainRouter.post("/api/getArticles", jsonParser,async(req:Request, res:Response)  => {
     var list = ["https://rss.app/feeds/MLuDKqkwFtd2tuMr.xml",
         "https://www.autobild.de/rss/22590661.xml"]
     var result:Topic[] = [];
@@ -32,7 +38,7 @@ mainRouter.post("/api/getArticles", async(req:Request, res:Response)  => {
         console.log("hello0")
     }
 
-    let length = result.length > 10 ? 10 : result.length
+    let length = result.length > 20 ? 20 : result.length
     for(let i = 0; i < length; i++){
         try{
         var actual_summary = GenericUtilService.extractArticleFromUrl(result[i].link);
@@ -48,8 +54,9 @@ mainRouter.post("/api/getArticles", async(req:Request, res:Response)  => {
     var combined : getArticlesView[] = [];
     var final_list :getArticlesViewList = {"data":[], "categories":[]};
     for(let i = 0; i < summaries.length; i++){
+        console.log(summaries[i].idx)
         result[summaries[i].idx].content = summaries[i].summary;
-        let tmp : getArticlesView = {metainfo:result[i],category:summaries[i].category};
+        let tmp : getArticlesView = {metainfo:result[summaries[i].idx],category:summaries[i].category};
         combined.push(tmp);
     }
     final_list.data = combined
@@ -57,7 +64,7 @@ mainRouter.post("/api/getArticles", async(req:Request, res:Response)  => {
     res.send(final_list);
 })
 
-mainRouter.post("/api/generateArticle", async (req: Request, res: Response) => {
+mainRouter.post("/api/generateArticle", jsonParser,async (req: Request, res: Response) => {
     // var selected_urls: string[] = ["https://www.t-online.de/mobilitaet/aktuelles/id_100537168/tesla-cybercab-kommt-nach-europa-hier-sehen-sie-das-elon-musk-robotaxi.html",
     //     "https://www.chip.de/news/In-Deutschland-gibt-es-jetzt-den-ersten-reinen-Ladepark-fuer-E-Autos_185625526.html",
     //     "https://www.merkur.de/wirtschaft/das-naechste-ampel-projekt-fuer-deutschland-in-gefahr-europas-hoffnungstraeger-ist-insolvent-zr-93426508.html"
@@ -112,11 +119,24 @@ mainRouter.post("/api/publishArticle", async (req: Request, res: Response) => {
 mainRouter.get("/api/debug", async(req:Request,res:Response)=>{
     var list = ["https://rss.app/feeds/MLuDKqkwFtd2tuMr.xml",
         "https://www.autobild.de/rss/22590661.xml"]
+
+    var result:Topic[] = [];
+    try{
     var result = await aggregator.fetchTopics(list);
-    let length = result.length > 10 ? 10 : result.length
+    }
+    catch(error:any){
+        console.log("hello0")
+    }
+
+    let length = result.length > 20 ? 20 : result.length
     for(let i = 0; i < length; i++){
+        try{
         var actual_summary = GenericUtilService.extractArticleFromUrl(result[i].link);
         result[i].content = await actual_summary || result[i].content;
+        }
+        catch(error:any){
+              result.splice(i, 1); // 2nd parameter means remove one item only
+        }
     }
 
     var summaries:Summary[] = await basicAIService.summaryArticles(result);
@@ -125,7 +145,7 @@ mainRouter.get("/api/debug", async(req:Request,res:Response)=>{
     var final_list :getArticlesViewList = {"data":[], "categories":[]};
     for(let i = 0; i < summaries.length; i++){
         result[summaries[i].idx].content = summaries[i].summary;
-        let tmp : getArticlesView = {metainfo:result[i],category:summaries[i].category};
+        let tmp : getArticlesView = {metainfo:result[summaries[i].idx],category:summaries[i].category};
         combined.push(tmp);
     }
     final_list.data = combined
