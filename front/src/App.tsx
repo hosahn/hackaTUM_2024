@@ -1,16 +1,27 @@
 import './App.css'
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
-import Start from './pages/Start.tsx';
+import ProvideSources from './pages/ProvideSources.tsx';
+import SelectInterestingTopics from "./pages/SelectInterestingTopics.tsx";
+import {AiOutlineAim} from "react-icons/ai";
 
 function App() {
   return (
-    <>
-      <Router>
-            <Routes>
-                <Route path="/" element={<Start />} />
-            </Routes>
-      </Router>
-    </>
+      <>
+          <div className="navbar bg-base-300 mb-10">
+              <a className="btn btn-ghost text-xl">
+                  <AiOutlineAim />
+                  HeadlineHunter
+              </a>
+          </div>
+          <Router>
+              <Routes>
+                  <Route path="/" element={<ProvideSources/>}/>
+              </Routes>
+              <Routes>
+                  <Route path="/selectTopics" element={<SelectInterestingTopics/>}/>
+              </Routes>
+          </Router>
+      </>
   )
 }
 
