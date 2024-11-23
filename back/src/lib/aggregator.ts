@@ -26,6 +26,7 @@ class Aggregator {
     async fetchTopics(urls: string[]): Promise<Topic[]> {
         // Use Promise.all to fetch all feeds concurrently
         const feeds = await Promise.all(urls.map(url => this.parser.parseURL(url)));
+        console.log("")
         let id = 0;
         let topics: Topic[] = feeds.flatMap(feed =>
             feed.items.map(item => ({

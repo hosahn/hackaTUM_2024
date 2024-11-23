@@ -35,14 +35,16 @@ class basicAIService{
         let result : string[] = []
 
         
-        let length = input.length > 10 ? 10 : input.length
+        let length = input.length > 15 ? 15 : input.length
         for(let i = 0; i < length; i++){
+            console.log(i)
             let text = input[i].content;
             try {
                 const api_call = await axios.post(
                     AZURE_ENDPOINT,
                     // prompt engineering 
-                    { "messages": [{"role": "user", "content": `Please get me a short summary (max. 2 sentences) of this article:${text} Don't answer with sure! or something like that. Please get straight into the point. And all of your result should be in English`
+                    { "messages": [{"role": "user", "content": `Please get me a short summary (max. 2 sentences) of this article:${text} Don't answer with sure! or something like that. Please get straight into the point. And all of your result should be in English
+                        if the articles sounds like an advertisement OR not relevant to themes like Electric autos or eco system, please answer me with string "WRONG"`
                     }], },
                 );
                 const responseMessage = api_call.data.choices[0].message.content;

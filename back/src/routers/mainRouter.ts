@@ -13,7 +13,7 @@ interface getArticlesView {
     metainfo : Topic,
     summary:string,
 }
-mainRouter.get("/api/getArticles", async(req:Request, res:Response)  => {
+mainRouter.post("/api/getArticles", async(req:Request, res:Response)  => {
     var list = ["https://rss.app/feeds/MLuDKqkwFtd2tuMr.xml",
         "https://www.autobild.de/rss/22590661.xml"]
     var result = await aggregator.fetchTopics(list);
@@ -46,5 +46,14 @@ mainRouter.post("/api/userFeedback", async(req:Request, res:Response) => {
 mainRouter.post("/api/publishArticle", async(req:Request,res:Response)=>{
     res.send("1337")
 })
+
+
+
+mainRouter.get("/api/debug", async(req:Request,res:Response)=>{
+    var list = await GenericUtilService.cool_keyword_google_scraper(["electic auto", "trump"])
+    res.send(list);
+})
+
+
 
 export { mainRouter }
