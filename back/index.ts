@@ -3,6 +3,8 @@ import { app } from "./src/app.ts";
 import cors from 'cors'
 
 
+
+
 dotenv.config();
 
 app.options('*', cors())

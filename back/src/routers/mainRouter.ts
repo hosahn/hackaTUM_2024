@@ -5,7 +5,7 @@ import { Aggregator, Topic } from '../lib/aggregator';
 const mainRouter:Router = Router();
 const aggregator:Aggregator = new Aggregator();
 mainRouter.get("/api", async(req:Request, res:Response)  => {
-    await basicAIService.generateMedia(["boy", "asian", "anime"])
+
     res.send("Welcome to news generator. Every requests should go through post request")
 })
 
