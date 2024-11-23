@@ -25,6 +25,7 @@ https://www.autobild.de/rss/22590661.xml
         let urls = data.urls.split('\n').filter(e => e.length > 0);
         axios.post("http://localhost:3000/api/getArticles", {urls}).then(response => {
             localStorage.setItem('articles', JSON.stringify(response.data));
+            console.log(response.data);
             navigate("/selectTopics");
         });
     };

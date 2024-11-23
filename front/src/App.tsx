@@ -1,8 +1,9 @@
 import './App.css'
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import ProvideSources from './pages/ProvideSources.tsx';
-import SelectInterestingTopics from "./pages/SelectInterestingTopics.tsx";
+import SelectTopics from "./pages/SelectTopics.tsx";
 import {AiOutlineAim} from "react-icons/ai";
+import ReviewArticle from "./pages/ReviewArticle.tsx";
 
 function App() {
   return (
@@ -19,7 +20,10 @@ function App() {
                   <Route path="/" element={<ProvideSources/>}/>
               </Routes>
               <Routes>
-                  <Route path="/selectTopics" element={<SelectInterestingTopics/>}/>
+                  <Route path="/selectTopics" element={<SelectTopics/>}/>
+              </Routes>
+              <Routes>
+                  <Route path="/reviewArticle" element={<ReviewArticle/>}/>
               </Routes>
           </Router>
           </div>

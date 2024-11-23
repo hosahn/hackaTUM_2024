@@ -130,7 +130,7 @@ mainRouter.get("/api/debug", async(req:Request,res:Response)=>{
     }
     final_list.data = combined
     final_list.categories = ["Deals", "New launch", "politics", "Environment", "Company news", "Future technology", "Two-wheeler"]
-    res.send(combined);
+    res.send(final_list);
 })
 
 
