@@ -5,7 +5,13 @@ import SelectTopics from "./pages/SelectTopics.tsx";
 import ReviewArticle from "./pages/ReviewArticle.tsx";
 import Finish from "./pages/Finish.tsx";
 
+import data from "./assets/mockData.ts";
+
 function App() {
+
+    localStorage.setItem("article-text", data.articletext);
+    localStorage.setItem("articles", data.articles);
+
     return (
         <>
             <div className="navbar bg-base-300 mb-10">

@@ -43,10 +43,12 @@ export default function ReviewArticle() {
                 description: data.lead,
                 image: {
                     url: 'https://images.unsplash.com/photo-1615901555268-839b7a1ede54?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                }
+                },
+                color: 0xFF9800,
             },{
                 title: data.subheadline,
                 description: data.body,
+                color: 0xFF9800,
             }]
         }).then(() => navigate("/finish", {replace: true}));
     }
